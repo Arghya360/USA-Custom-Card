@@ -123,3 +123,33 @@ GitHub: @Arghya360
 Email: codehub0792@gmail.com
 
 Made with ❤️
+
+---
+
+import React from "react";
+import SafeImage from "./SafeImage";
+
+type Props = React.ImgHTMLAttributes<HTMLImageElement> & {
+  fallback?: string; // e.g. "/arghya/placeholder.png"
+};
+
+export default function SafeImage({ src, fallback = "/arghya/placeholder.png", alt = "", ...rest }: Props) {
+  const handleError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    const img = e.currentTarget;
+    if (img.src.endsWith(fallback)) return;
+    img.onerror = null as any;
+    img.src = fallback;
+  };
+
+  return <img src={src} alt={alt} onError={handleError} {...rest} />;
+}
+
+export default function Card({ image }: { image: string }) {
+  return (
+    <div className="card">
+      <SafeImage src={image} alt="project" className="w-full h-auto" />
+    </div>
+  );
+}
+
+<img src="/arghya/photo.jpg" alt="photo" onerror="this.onerror=null;this.src='/arghya/placeholder.png'">
